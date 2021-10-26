@@ -9,7 +9,9 @@ class CollectionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Collection
-        fields = ['id', 'title']
+        fields = ['id', 'title', 'products_count']
+
+    products_count = serializers.IntegerField()
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -33,21 +35,6 @@ class ProductSerializer(serializers.ModelSerializer):
 
     price_with_tax = serializers.SerializerMethodField(
         method_name='calculate_tax')
-    # collection = serializers.HyperlinkedRelatedField(
-    #     queryset=Collection.objects.all(),
-    #     view_name='collection-detail'
-    # )
-    # collection = CollectionSerializer()
-    # collection = serializers.StringRelatedField()
-    # collection = serializers.PrimaryKeyRelatedField(
-    # queryset=Collection.objects.all()
-    # )
 
     def calculate_tax(self, product: Product):
-        # return product.unit_price * Decimal(1.1)
         return Decimal(format(product.unit_price * Decimal(1.1), '0.2f'))
-
-    # def validate(self, data):
-    #     if data['password'] != data['confirm_password']:
-    #         return serializers.ValidationError('Passwords donot match')
-    #     return data
